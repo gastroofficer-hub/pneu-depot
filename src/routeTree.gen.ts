@@ -10,33 +10,79 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as KatalogRouteImport } from './routes/katalog'
+import { Route as KontaktRouteImport } from './routes/kontakt'
+import { Route as PruvodceRouteImport } from './routes/pruvodce'
+import { Route as PneumatikaSlugRouteImport } from './routes/pneumatika.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const KatalogRoute = KatalogRouteImport.update({
+  id: '/katalog',
+  path: '/katalog',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KontaktRoute = KontaktRouteImport.update({
+  id: '/kontakt',
+  path: '/kontakt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PruvodceRoute = PruvodceRouteImport.update({
+  id: '/pruvodce',
+  path: '/pruvodce',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PneumatikaSlugRoute = PneumatikaSlugRouteImport.update({
+  id: '/pneumatika/$slug',
+  path: '/pneumatika/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/katalog': typeof KatalogRoute
+  '/kontakt': typeof KontaktRoute
+  '/pruvodce': typeof PruvodceRoute
+  '/pneumatika/$slug': typeof PneumatikaSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/katalog': typeof KatalogRoute
+  '/kontakt': typeof KontaktRoute
+  '/pruvodce': typeof PruvodceRoute
+  '/pneumatika/$slug': typeof PneumatikaSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/katalog': typeof KatalogRoute
+  '/kontakt': typeof KontaktRoute
+  '/pruvodce': typeof PruvodceRoute
+  '/pneumatika/$slug': typeof PneumatikaSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/katalog' | '/kontakt' | '/pruvodce' | '/pneumatika/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/katalog' | '/kontakt' | '/pruvodce' | '/pneumatika/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/katalog'
+    | '/kontakt'
+    | '/pruvodce'
+    | '/pneumatika/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KatalogRoute: typeof KatalogRoute
+  KontaktRoute: typeof KontaktRoute
+  PruvodceRoute: typeof PruvodceRoute
+  PneumatikaSlugRoute: typeof PneumatikaSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +94,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/katalog': {
+      id: '/katalog'
+      path: '/katalog'
+      fullPath: '/katalog'
+      preLoaderRoute: typeof KatalogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kontakt': {
+      id: '/kontakt'
+      path: '/kontakt'
+      fullPath: '/kontakt'
+      preLoaderRoute: typeof KontaktRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pruvodce': {
+      id: '/pruvodce'
+      path: '/pruvodce'
+      fullPath: '/pruvodce'
+      preLoaderRoute: typeof PruvodceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pneumatika/$slug': {
+      id: '/pneumatika/$slug'
+      path: '/pneumatika/$slug'
+      fullPath: '/pneumatika/$slug'
+      preLoaderRoute: typeof PneumatikaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KatalogRoute: KatalogRoute,
+  KontaktRoute: KontaktRoute,
+  PruvodceRoute: PruvodceRoute,
+  PneumatikaSlugRoute: PneumatikaSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
