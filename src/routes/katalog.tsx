@@ -13,11 +13,11 @@ import {
 } from "@/data/tires";
 
 type CatalogSearch = {
-  sirka?: number;
-  profil?: number;
-  prumer?: number;
-  sezona?: Season;
-  znacka?: string;
+  sirka?: number | undefined;
+  profil?: number | undefined;
+  prumer?: number | undefined;
+  sezona?: Season | undefined;
+  znacka?: string | undefined;
 };
 
 const seasons: Season[] = ["zimni", "letni", "celorocni"];
