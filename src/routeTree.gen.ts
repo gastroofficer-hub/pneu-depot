@@ -10,14 +10,26 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as KatalogRouteImport } from './routes/katalog'
 import { Route as KontaktRouteImport } from './routes/kontakt'
 import { Route as PruvodceRouteImport } from './routes/pruvodce'
+import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as PneumatikaSlugRouteImport } from './routes/pneumatika.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KatalogRoute = KatalogRouteImport.update({
@@ -35,6 +47,11 @@ const PruvodceRoute = PruvodceRouteImport.update({
   path: '/pruvodce',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const PneumatikaSlugRoute = PneumatikaSlugRouteImport.update({
   id: '/pneumatika/$slug',
   path: '/pneumatika/$slug',
@@ -43,42 +60,68 @@ const PneumatikaSlugRoute = PneumatikaSlugRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/katalog': typeof KatalogRoute
   '/kontakt': typeof KontaktRoute
   '/pruvodce': typeof PruvodceRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/pneumatika/$slug': typeof PneumatikaSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/katalog': typeof KatalogRoute
   '/kontakt': typeof KontaktRoute
   '/pruvodce': typeof PruvodceRoute
+  '/admin': typeof AuthenticatedAdminRoute
   '/pneumatika/$slug': typeof PneumatikaSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/auth': typeof AuthRoute
   '/katalog': typeof KatalogRoute
   '/kontakt': typeof KontaktRoute
   '/pruvodce': typeof PruvodceRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/pneumatika/$slug': typeof PneumatikaSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/katalog' | '/kontakt' | '/pruvodce' | '/pneumatika/$slug'
-  fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/katalog' | '/kontakt' | '/pruvodce' | '/pneumatika/$slug'
-  id:
-    | '__root__'
+  fullPaths:
     | '/'
+    | '/auth'
     | '/katalog'
     | '/kontakt'
     | '/pruvodce'
+    | '/admin'
+    | '/pneumatika/$slug'
+  fileRoutesByTo: FileRoutesByTo
+  to:
+    | '/'
+    | '/auth'
+    | '/katalog'
+    | '/kontakt'
+    | '/pruvodce'
+    | '/admin'
+    | '/pneumatika/$slug'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated'
+    | '/auth'
+    | '/katalog'
+    | '/kontakt'
+    | '/pruvodce'
+    | '/_authenticated/admin'
     | '/pneumatika/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AuthRoute: typeof AuthRoute
   KatalogRoute: typeof KatalogRoute
   KontaktRoute: typeof KontaktRoute
   PruvodceRoute: typeof PruvodceRoute
@@ -92,6 +135,20 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/katalog': {
@@ -115,6 +172,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PruvodceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/pneumatika/$slug': {
       id: '/pneumatika/$slug'
       path: '/pneumatika/$slug'
@@ -125,8 +189,21 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRoute: typeof AuthenticatedAdminRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRoute: AuthenticatedAdminRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AuthRoute: AuthRoute,
   KatalogRoute: KatalogRoute,
   KontaktRoute: KontaktRoute,
   PruvodceRoute: PruvodceRoute,
