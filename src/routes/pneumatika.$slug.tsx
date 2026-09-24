@@ -2,11 +2,14 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import heroTire from "@/assets/hero-tire.jpg";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { formatPrice, seasonLabels, tireSize, tires } from "@/data/tires";
+import { useQuery } from "@tanstack/react-query";
+import { formatPrice, seasonLabels, tireSize } from "@/data/tires";
+import { getTire } from "@/lib/tires.functions";
+import { tiresQuery } from "@/lib/tires-queries";
 
 export const Route = createFileRoute("/pneumatika/$slug")({
-  loader: ({ params }) => {
-    const tire = tires.find((t) => t.slug === params.slug);
+  loader: async ({ params }) => {
+    const tire = await getTire({ data: { slug: params.slug } });
     if (!tire) throw notFound();
     return { tire };
   },
@@ -50,10 +53,23 @@ export const Route = createFileRoute("/pneumatika/$slug")({
     };
   },
   component: TireDetail,
+  notFoundComponent: () => (
+    <div className="mx-auto max-w-xl px-4 py-24 text-center">
+      <h1 className="text-3xl font-bold">Pneumatika nenalezena</h1>
+      <Link to="/katalog" className="mt-4 inline-block text-primary">Zpět do katalogu</Link>
+    </div>
+  ),
+  errorComponent: () => (
+    <div className="mx-auto max-w-xl px-4 py-24 text-center">
+      <h1 className="text-3xl font-bold">Produkt se nepodařilo načíst</h1>
+      <Link to="/katalog" className="mt-4 inline-block text-primary">Zpět do katalogu</Link>
+    </div>
+  ),
 });
 
 function TireDetail() {
   const { tire } = Route.useLoaderData();
+  const { data: tires = [] } = useQuery(tiresQuery);
   const related = tires.filter((t) => t.slug !== tire.slug && t.season === tire.season).slice(0, 3);
 
   return (

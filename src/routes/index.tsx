@@ -4,7 +4,8 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { SizeSearch } from "@/components/size-search";
 import { TireCard } from "@/components/tire-card";
-import { tires } from "@/data/tires";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { tiresQuery } from "@/lib/tires-queries";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -25,6 +26,7 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "/" }],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(tiresQuery),
   component: Index,
 });
 
@@ -50,6 +52,7 @@ const seasons = [
 ];
 
 function Index() {
+  const { data: tires } = useSuspenseQuery(tiresQuery);
   const featured = tires.slice(0, 6);
 
   return (

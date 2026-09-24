@@ -2,15 +2,9 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { TireCard } from "@/components/tire-card";
-import {
-  brands,
-  diameters,
-  profiles,
-  seasonLabels,
-  tires,
-  widths,
-  type Season,
-} from "@/data/tires";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { seasonLabels, type Season } from "@/data/tires";
+import { tiresQuery } from "@/lib/tires-queries";
 
 type CatalogSearch = {
   sirka?: number | undefined;
@@ -50,6 +44,7 @@ export const Route = createFileRoute("/katalog")({
     ],
     links: [{ rel: "canonical", href: "/katalog" }],
   }),
+  loader: ({ context }) => context.queryClient.ensureQueryData(tiresQuery),
   component: Katalog,
 });
 
@@ -62,6 +57,14 @@ function Katalog() {
 
   const update = (patch: CatalogSearch) =>
     navigate({ search: (prev: CatalogSearch) => ({ ...prev, ...patch }) });
+
+  const { data: tires } = useSuspenseQuery(tiresQuery);
+  const uniq = <T,>(xs: T[]) => [...new Set(xs)].sort() as T[];
+  const num = (xs: number[]) => [...new Set(xs)].sort((a, b) => a - b);
+  const widths = num(tires.map((t) => t.width));
+  const profiles = num(tires.map((t) => t.profile));
+  const diameters = num(tires.map((t) => t.diameter));
+  const brands = uniq(tires.map((t) => t.brand));
 
   const results = tires.filter(
     (t) =>
