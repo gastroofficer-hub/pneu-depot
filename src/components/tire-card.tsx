@@ -14,7 +14,7 @@ export function TireCard({ tire }: { tire: Tire }) {
     <Link
       to="/pneumatika/$slug"
       params={{ slug: tire.slug }}
-      className="group flex flex-col justify-between rounded-lg border border-border bg-card p-5 transition-colors hover:border-primary/60"
+      className="group flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-card p-5 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:border-primary/60 hover:shadow-glow"
     >
       <div>
         <div className="relative">
@@ -22,7 +22,7 @@ export function TireCard({ tire }: { tire: Tire }) {
           src={tire.imageUrl ?? heroTire}
           alt={`${tire.brand} ${tire.model}`}
           loading="lazy"
-          className="-mx-5 -mt-5 mb-4 aspect-[4/3] w-[calc(100%+2.5rem)] max-w-none rounded-t-lg object-cover"
+          className="-mx-5 -mt-5 mb-4 aspect-[4/3] w-[calc(100%+2.5rem)] max-w-none rounded-t-lg object-cover transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute right-0 top-0 flex gap-1.5" aria-label={seasonLabels[tire.season]}>
           {(tire.season === "zimni" || tire.season === "celorocni") && (
