@@ -33,7 +33,8 @@ export function SiteFooter() {
         </div>
       </div>
       <div className="border-t border-border px-4 py-4 text-center text-xs text-muted-foreground">
-        © {new Date().getFullYear()} PneuDepot. Ukázkový obsah, ceny jsou ilustrativní.
+        © {new Date().getFullYear()} PneuDepot. Ukázkový obsah, ceny jsou ilustrativní. ·{" "}
+        <Link to="/admin" className="hover:text-foreground">Administrace</Link>
       </div>
     </footer>
   );
