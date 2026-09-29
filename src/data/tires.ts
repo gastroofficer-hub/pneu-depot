@@ -17,6 +17,7 @@ export type Tire = {
   wet: string;
   noise: number;
   category: "osobni" | "suv" | "dodavka";
+  imageUrl: string | null;
 };
 
 export const seasonLabels: Record<Season, string> = {

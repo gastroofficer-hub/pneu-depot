@@ -22,6 +22,7 @@ export type Database = {
           diameter: number
           fuel: string
           id: string
+          image_url: string | null
           load_index: string
           model: string
           noise: number
@@ -41,6 +42,7 @@ export type Database = {
           diameter: number
           fuel?: string
           id?: string
+          image_url?: string | null
           load_index?: string
           model: string
           noise?: number
@@ -60,6 +62,7 @@ export type Database = {
           diameter?: number
           fuel?: string
           id?: string
+          image_url?: string | null
           load_index?: string
           model?: string
           noise?: number

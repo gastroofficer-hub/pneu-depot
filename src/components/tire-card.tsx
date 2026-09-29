@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import heroTire from "@/assets/hero-tire.jpg";
 import { formatPrice, seasonLabels, tireSize, type Tire } from "@/data/tires";
 
 const seasonClass: Record<Tire["season"], string> = {
@@ -15,6 +16,12 @@ export function TireCard({ tire }: { tire: Tire }) {
       className="group flex flex-col justify-between rounded-lg border border-border bg-card p-5 transition-colors hover:border-primary/60"
     >
       <div>
+        <img
+          src={tire.imageUrl ?? heroTire}
+          alt={`${tire.brand} ${tire.model}`}
+          loading="lazy"
+          className="-mx-5 -mt-5 mb-4 aspect-[4/3] w-[calc(100%+2.5rem)] max-w-none rounded-t-lg object-cover"
+        />
         <div className="flex items-start justify-between gap-3">
           <span
             className={`rounded border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${seasonClass[tire.season]}`}

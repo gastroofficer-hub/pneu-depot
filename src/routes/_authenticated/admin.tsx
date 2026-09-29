@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { SiteHeader } from "@/components/site-header";
+import heroTire from "@/assets/hero-tire.jpg";
 import { formatPrice, seasonLabels, tireSize, type Season, type Tire } from "@/data/tires";
 import { rowToTire } from "@/lib/tires.functions";
 
@@ -22,7 +23,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 type Form = Omit<Tire, "id">;
 const empty: Form = {
   slug: "", brand: "", model: "", width: 205, profile: 55, diameter: 16, loadIndex: "91",
-  speedIndex: "V", season: "letni", price: 0, stock: 0, fuel: "C", wet: "B", noise: 70, category: "osobni",
+  speedIndex: "V", season: "letni", price: 0, stock: 0, fuel: "C", wet: "B", noise: 70, category: "osobni", imageUrl: null,
 };
 
 const slugify = (f: Form) =>
@@ -71,6 +72,7 @@ function AdminPage() {
       slug: f.slug || slugify(f), brand: f.brand, model: f.model, width: f.width, profile: f.profile,
       diameter: f.diameter, load_index: f.loadIndex, speed_index: f.speedIndex, season: f.season,
       price: f.price, stock: f.stock, fuel: f.fuel, wet: f.wet, noise: f.noise, category: f.category,
+      image_url: f.imageUrl,
     };
     const res = editing.id
       ? await supabase.from("tires").update(row).eq("id", editing.id)
@@ -81,6 +83,22 @@ function AdminPage() {
     }
     setEditing(null);
     refresh();
+  };
+
+  const [uploading, setUploading] = useState(false);
+  const upload = async (file: File) => {
+    setUploading(true);
+    setError(null);
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const up = await supabase.storage.from("tire-images").upload(path, file, { contentType: file.type });
+    if (up.error) {
+      setError("Nahrání fotky se nezdařilo.");
+    } else {
+      const { data } = await supabase.storage.from("tire-images").createSignedUrl(path, 60 * 60 * 24 * 365 * 20);
+      if (data) set("imageUrl", data.signedUrl);
+    }
+    setUploading(false);
   };
 
   const remove = async (t: Tire) => {
@@ -170,6 +188,19 @@ function AdminPage() {
               {field("Hlučnost (dB)", "noise", "number")}
               {field("Adresa (slug, nepovinné)", "slug")}
             </div>
+            <div className="mt-4 flex items-center gap-4">
+              <img src={editing.form.imageUrl ?? heroTire} alt="Náhled" className="h-24 w-32 rounded border border-border object-cover" />
+              <div className="space-y-2 text-sm">
+                <label className="inline-block cursor-pointer rounded-md border border-border px-3 py-2 hover:border-primary">
+                  {uploading ? "Nahrávám…" : "Nahrát fotku"}
+                  <input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={(e) => e.target.files?.[0] && upload(e.target.files[0])} />
+                </label>
+                {editing.form.imageUrl && (
+                  <button type="button" onClick={() => set("imageUrl", null)} className="ml-3 text-destructive hover:underline">Odebrat fotku</button>
+                )}
+                <p className="text-xs text-muted-foreground">Bez fotky se zobrazí výchozí obrázek.</p>
+              </div>
+            </div>
             {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
             <div className="mt-4 flex gap-2">
               <button onClick={save} disabled={!editing.form.brand || !editing.form.model} className="rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground disabled:opacity-50">Uložit</button>
@@ -190,7 +221,7 @@ function AdminPage() {
               <tbody>
                 {list.data.map((t) => (
                   <tr key={t.id} className="border-t border-border">
-                    <td className="p-3 font-medium">{t.brand} {t.model}</td>
+                    <td className="p-3 font-medium"><div className="flex items-center gap-3"><img src={t.imageUrl ?? heroTire} alt="" className="h-10 w-12 rounded object-cover" />{t.brand} {t.model}</div></td>
                     <td className="p-3">{tireSize(t)} {t.loadIndex}{t.speedIndex}</td>
                     <td className="p-3">{seasonLabels[t.season]}</td>
                     <td className="p-3 text-right">{formatPrice(t.price)}</td>
