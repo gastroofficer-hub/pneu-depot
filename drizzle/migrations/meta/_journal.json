@@ -8,6 +8,13 @@
       "when": 1790266791101,
       "tag": "0000_admin_tires",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790721186928,
+      "tag": "0001_tire_images",
+      "breakpoints": true
     }
   ]
 }
