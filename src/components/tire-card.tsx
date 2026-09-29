@@ -14,17 +14,20 @@ export function TireCard({ tire }: { tire: Tire }) {
     <Link
       to="/pneumatika/$slug"
       params={{ slug: tire.slug }}
-      className="group flex flex-col justify-between overflow-hidden rounded-lg border border-border bg-card p-5 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:border-primary/60 hover:shadow-glow"
+      className="group relative flex flex-col justify-between rounded-lg border border-border bg-card p-5 transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:border-primary/60 hover:shadow-glow"
     >
-      <div>
-        <div className="relative">
+      <span aria-hidden className="smoke pointer-events-none">
+        <i /><i /><i /><i /><i />
+      </span>
+      <div className="relative">
+        <div className="relative -mx-5 -mt-5 mb-4 overflow-hidden rounded-t-lg">
         <img
           src={tire.imageUrl ?? heroTire}
           alt={`${tire.brand} ${tire.model}`}
           loading="lazy"
-          className="-mx-5 -mt-5 mb-4 aspect-[4/3] w-[calc(100%+2.5rem)] max-w-none rounded-t-lg object-cover transition-transform duration-500 group-hover:scale-105"
+          className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="absolute right-0 top-0 flex gap-1.5" aria-label={seasonLabels[tire.season]}>
+        <div className="absolute right-2 top-2 flex gap-1.5" aria-label={seasonLabels[tire.season]}>
           {(tire.season === "zimni" || tire.season === "celorocni") && (
             <span className="flex h-9 w-9 items-center justify-center rounded-full border border-winter/50 bg-background/80 text-winter backdrop-blur">
               <Snowflake className="h-5 w-5" />

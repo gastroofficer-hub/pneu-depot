@@ -89,3 +89,43 @@
     linear-gradient(to bottom, oklch(1 0 0 / 0.04) 1px, transparent 1px);
   background-size: 56px 56px;
 }
+
+/* Kouř kolem karty pneumatiky při najetí */
+.smoke {
+  position: absolute;
+  inset: -1.5rem -1rem -2rem;
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.group:hover > .smoke,
+.group:focus-visible > .smoke {
+  opacity: 1;
+}
+.smoke i {
+  position: absolute;
+  bottom: 0;
+  width: 45%;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  background: radial-gradient(circle, color-mix(in oklch, var(--foreground) 35%, transparent) 0%, transparent 65%);
+  filter: blur(18px);
+  opacity: 0;
+}
+.group:hover > .smoke i,
+.group:focus-visible > .smoke i {
+  animation: smoke-rise 3.2s ease-out infinite;
+}
+.smoke i:nth-child(1) { left: -8%; animation-delay: 0s !important; }
+.smoke i:nth-child(2) { left: 20%; animation-delay: 0.6s !important; }
+.smoke i:nth-child(3) { left: 45%; animation-delay: 1.2s !important; }
+.smoke i:nth-child(4) { left: 65%; animation-delay: 1.8s !important; }
+.smoke i:nth-child(5) { left: 5%; bottom: 40%; animation-delay: 2.4s !important; }
+@keyframes smoke-rise {
+  0% { transform: translateY(20%) scale(0.6); opacity: 0; }
+  25% { opacity: 0.9; }
+  100% { transform: translateY(-120%) translateX(10%) scale(1.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .group:hover > .smoke i { animation: none; opacity: 0.5; }
+}
