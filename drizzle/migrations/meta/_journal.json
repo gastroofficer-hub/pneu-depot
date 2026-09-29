@@ -15,6 +15,13 @@
       "when": 1790721186928,
       "tag": "0001_tire_images",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1790721197851,
+      "tag": "0002_tire_images_read",
+      "breakpoints": true
     }
   ]
 }

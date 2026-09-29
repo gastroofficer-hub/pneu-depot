@@ -23,6 +23,7 @@ export const rowToTire = (r: Row): Tire => ({
   wet: r.wet,
   noise: r.noise,
   category: r.category as Tire["category"],
+  imageUrl: r.image_url,
 });
 
 function publicClient() {

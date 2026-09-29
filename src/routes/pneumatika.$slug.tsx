@@ -82,7 +82,7 @@ function TireDetail() {
 
         <div className="mt-6 grid gap-8 lg:grid-cols-2">
           <img
-            src={heroTire}
+            src={tire.imageUrl ?? heroTire}
             alt={`${tire.brand} ${tire.model}`}
             loading="lazy"
             width={1600}
