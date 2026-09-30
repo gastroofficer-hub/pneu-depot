@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import heroTire from "@/assets/hero-tire.jpg";
-import { Snowflake, Sun } from "lucide-react";
+import { Snowflake, Sun, Scale } from "lucide-react";
+import { MAX_COMPARE, toggleCompare, useCompare } from "@/lib/compare";
 import { formatPrice, seasonLabels, tireSize, type Tire } from "@/data/tires";
 
 const seasonClass: Record<Tire["season"], string> = {
@@ -10,6 +11,9 @@ const seasonClass: Record<Tire["season"], string> = {
 };
 
 export function TireCard({ tire }: { tire: Tire }) {
+  const ids = useCompare();
+  const inCompare = ids.includes(tire.slug);
+  const full = !inCompare && ids.length >= MAX_COMPARE;
   return (
     <Link
       to="/pneumatika/$slug"
@@ -73,7 +77,20 @@ export function TireCard({ tire }: { tire: Tire }) {
       </div>
       <div className="mt-5 flex items-end justify-between">
         <span className="font-display text-2xl font-bold">{formatPrice(tire.price)}</span>
-        <span className="text-sm font-medium text-primary group-hover:underline">Detail</span>
+        <button
+          type="button"
+          disabled={full}
+          title={full ? `Porovnat lze max. ${MAX_COMPARE} pneumatiky` : undefined}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleCompare(tire.slug);
+          }}
+          className={`inline-flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-xs font-semibold transition-colors disabled:opacity-40 ${inCompare ? "border-primary bg-primary text-primary-foreground" : "border-border text-muted-foreground hover:border-primary hover:text-primary"}`}
+        >
+          <Scale className="h-3.5 w-3.5" />
+          {inCompare ? "V porovnání" : "Porovnat"}
+        </button>
       </div>
     </Link>
   );
