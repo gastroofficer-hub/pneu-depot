@@ -14,6 +14,7 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as KatalogRouteImport } from './routes/katalog'
 import { Route as KontaktRouteImport } from './routes/kontakt'
+import { Route as PorovnaniRouteImport } from './routes/porovnani'
 import { Route as PruvodceRouteImport } from './routes/pruvodce'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as PneumatikaSlugRouteImport } from './routes/pneumatika.$slug'
@@ -42,6 +43,11 @@ const KontaktRoute = KontaktRouteImport.update({
   path: '/kontakt',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PorovnaniRoute = PorovnaniRouteImport.update({
+  id: '/porovnani',
+  path: '/porovnani',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PruvodceRoute = PruvodceRouteImport.update({
   id: '/pruvodce',
   path: '/pruvodce',
@@ -63,6 +69,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/katalog': typeof KatalogRoute
   '/kontakt': typeof KontaktRoute
+  '/porovnani': typeof PorovnaniRoute
   '/pruvodce': typeof PruvodceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/pneumatika/$slug': typeof PneumatikaSlugRoute
@@ -72,6 +79,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/katalog': typeof KatalogRoute
   '/kontakt': typeof KontaktRoute
+  '/porovnani': typeof PorovnaniRoute
   '/pruvodce': typeof PruvodceRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/pneumatika/$slug': typeof PneumatikaSlugRoute
@@ -83,6 +91,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/katalog': typeof KatalogRoute
   '/kontakt': typeof KontaktRoute
+  '/porovnani': typeof PorovnaniRoute
   '/pruvodce': typeof PruvodceRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/pneumatika/$slug': typeof PneumatikaSlugRoute
@@ -94,6 +103,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/katalog'
     | '/kontakt'
+    | '/porovnani'
     | '/pruvodce'
     | '/admin'
     | '/pneumatika/$slug'
@@ -103,6 +113,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/katalog'
     | '/kontakt'
+    | '/porovnani'
     | '/pruvodce'
     | '/admin'
     | '/pneumatika/$slug'
@@ -113,6 +124,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/katalog'
     | '/kontakt'
+    | '/porovnani'
     | '/pruvodce'
     | '/_authenticated/admin'
     | '/pneumatika/$slug'
@@ -124,6 +136,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   KatalogRoute: typeof KatalogRoute
   KontaktRoute: typeof KontaktRoute
+  PorovnaniRoute: typeof PorovnaniRoute
   PruvodceRoute: typeof PruvodceRoute
   PneumatikaSlugRoute: typeof PneumatikaSlugRoute
 }
@@ -163,6 +176,13 @@ declare module '@tanstack/react-router' {
       path: '/kontakt'
       fullPath: '/kontakt'
       preLoaderRoute: typeof KontaktRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/porovnani': {
+      id: '/porovnani'
+      path: '/porovnani'
+      fullPath: '/porovnani'
+      preLoaderRoute: typeof PorovnaniRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pruvodce': {
@@ -206,6 +226,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   KatalogRoute: KatalogRoute,
   KontaktRoute: KontaktRoute,
+  PorovnaniRoute: PorovnaniRoute,
   PruvodceRoute: PruvodceRoute,
   PneumatikaSlugRoute: PneumatikaSlugRoute,
 }
